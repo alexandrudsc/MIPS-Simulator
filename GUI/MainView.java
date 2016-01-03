@@ -1,5 +1,6 @@
 package GUI;
 
+import file.operations.Utils;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.Label;
@@ -17,6 +18,9 @@ import simulator.Simulator;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -26,80 +30,29 @@ public class MainView extends JFrame {
 	Simulator sim;
 	
 	private JPanel contentPane;
+        
 	private JScrollPane instructionMemory;
-	private JPanel panel;
+	private JPanel panelInstructions;
+        private ArrayList<JLabel> instructionLabels;
+        
 	private JScrollPane dataMemory;
-	private JPanel panel2;
+	private JPanel panelMemory;
+        
 	private JScrollPane registers;
-	private JPanel panel3;
-	private ArrayList<JLabel> instructionLabels;
+	private JPanel paneRegisters;
         
-        // live interpreter (one instr at the time)
-        private Interpreter interpreter;
-        
-	private JPanel panel_1;
-	/**
-	 * @return the panel2
-	 */
-	public JPanel getPanel2() {
-		return panel2;
-	}
-
-	/**
-	 * @param panel2 the panel2 to set
-	 */
-	public void setPanel2(JPanel panel2) {
-		this.panel2 = panel2;
-	}
-
-	/**
-	 * @return the panel3
-	 */
-	public JPanel getPanel3() {
-		return panel3;
-	}
-
-	/**
-	 * @param panel3 the panel3 to set
-	 */
-	public void setPanel3(JPanel panel3) {
-		this.panel3 = panel3;
-	}
-
-	/**
-	 * @return the panel_1
-	 */
-	public JPanel getPanel_1() {
-		return panel_1;
-	}
-
-	/**
-	 * @param panel_1 the panel_1 to set
-	 */
-	public void setPanel_1(JPanel panel_1) {
-		this.panel_1 = panel_1;
-	}
-
-	/**
-	 * @return the panel_2
-	 */
-	public JPanel getPanel_2() {
-		return panel_2;
-	}
-
-	/**
-	 * @param panel_2 the panel_2 to set
-	 */
-	public void setPanel_2(JPanel panel_2) {
-		this.panel_2 = panel_2;
-	}
-
-	private JPanel panel_2;
+        private JPanel panel_2;
 	private JFrame datapathFrame;
 	public DataPath datapath;
 	private JButton next;
 	private JButton next_instruction;
 	private JButton run;
+        
+        // live interpreter (one instr at the time)
+        private Interpreter interpreter;
+        
+	private JPanel panel_1;
+	
 
 
 	/**
@@ -132,53 +85,53 @@ public class MainView extends JFrame {
 		datapathFrame.add(datapath);
 		datapathFrame.setVisible(true);
 		
-                // label for memory panel
+                // label for memory panelInstructions
 		Label instrLabel = new Label("Instrucțiuni");
                 instrLabel.setBounds(10, 50, 100, 20);
                 contentPane.add(instrLabel);
                 
-                // add instruction panel
+                // add instruction panelInstructions
 		instructionMemory = new JScrollPane();
 		instructionMemory.setBounds(10, 70, 190, 300);
 		contentPane.add(instructionMemory);
                 
-		panel = new JPanel();
-		panel.setBorder(new LineBorder(new Color(0, 0, 0)));
-		instructionMemory.setViewportView(panel);
+		panelInstructions = new JPanel();
+		panelInstructions.setBorder(new LineBorder(new Color(0, 0, 0)));
+		instructionMemory.setViewportView(panelInstructions);
 		
-                // label for memory panel
+                // label for memory panelInstructions
 		Label memLabel = new Label("Memoria");
                 memLabel.setBounds(220, 50, 100, 20);
                 contentPane.add(memLabel);
                 
-                // add memory panel
+                // add memory panelInstructions
 		dataMemory = new JScrollPane();
 		dataMemory.setBounds(220, 70, 110, 300);
 		contentPane.add(dataMemory);
 		
-		panel2 = new JPanel();
-		panel2.setBorder(new LineBorder(new Color(0, 0, 0)));
-		dataMemory.setViewportView(panel2);
+		panelMemory = new JPanel();
+		panelMemory.setBorder(new LineBorder(new Color(0, 0, 0)));
+		dataMemory.setViewportView(panelMemory);
 		
-                // label for registers panel
+                // label for registers panelInstructions
                 Label regLabel = new Label("Regiștri");
                 regLabel.setBounds(350, 50, 100, 20);
                 contentPane.add(regLabel);
                 
-		// add registers panel
+		// add registers panelInstructions
 		registers = new JScrollPane();
 		registers.setBounds(350, 70, 190, 300);
 		contentPane.add(registers);
 		
-		panel3 = new JPanel();
-		panel3.setBorder(new LineBorder(new Color(0, 0, 0)));
-		registers.setViewportView(panel3);
+		paneRegisters = new JPanel();
+		paneRegisters.setBorder(new LineBorder(new Color(0, 0, 0)));
+		registers.setViewportView(paneRegisters);
 		
 		panel_1 = new JPanel();
-		panel3.add(panel_1);
+		paneRegisters.add(panel_1);
 		
 		panel_2 = new JPanel();
-		panel3.add(panel_2);
+		paneRegisters.add(panel_2);
 		
                 // create button for next cycle
 		next = new JButton("Ciclul urmator");
@@ -225,17 +178,17 @@ public class MainView extends JFrame {
 		run.setBounds(350, 10, 120, 20);
 		contentPane.add(run);
 		
-                // label for interpreter panel
+                // label for interpreter panelInstructions
 		Label interprLabel = new Label("Interpretor");
                 interprLabel .setBounds(0, 400, 100, 20);
                 contentPane.add(interprLabel );
                 
-                // add interpreter panel
-                interpreter = new Interpreter();
+                // add interpreter panelInstructions
+                interpreter = new Interpreter(this.sim);
                 interpreter.setBounds(0, 420, this.getWidth() - 50, this.getHeight()/3);   
                 contentPane.add(interpreter);
                 
-		panel3.setLayout(new GridLayout(1, 2, 0, 0));
+		paneRegisters.setLayout(new GridLayout(1, 2, 0, 0));
 		panel_1.setLayout(new GridLayout(32, 1, 0, 0));
 		panel_1.add(new JLabel("$zero"));
 		panel_1.add(new JLabel("$at"));
@@ -281,14 +234,14 @@ public class MainView extends JFrame {
 	}
 	
 	public void fillMemory(byte[]memory){
-		panel2.setLayout(new GridLayout(memory.length, 1, 0, 0));
+		panelMemory.setLayout(new GridLayout(memory.length, 1, 0, 0));
 		for(int i=0 ; i<memory.length;i++){
 			JLabel l = new JLabel(memory[i] + "");
 			l.setBorder(new LineBorder(new Color(0, 0, 0)));
-			panel2.add(l);
+			panelMemory.add(l);
 		}
-		dataMemory.remove(panel2);
-		dataMemory.setViewportView(panel2);
+		dataMemory.remove(panelMemory);
+		dataMemory.setViewportView(panelMemory);
 		repaint();
 	}
 	
@@ -301,22 +254,23 @@ public class MainView extends JFrame {
 			panel_2.add(l);
 		}
 		panel_2.repaint();
-		panel3.remove(panel_2);
-		panel3.add(panel_2);
-		panel3.repaint();
+		paneRegisters.remove(panel_2);
+		paneRegisters.add(panel_2);
+		paneRegisters.repaint();
 		repaint();
 		validate();
 	}
 	
 	public void addInstructions(ArrayList<String> instructions){
-		panel.setLayout(new GridLayout(instructions.size(), 1, 0, 0));
+		panelInstructions.setLayout(new GridLayout(instructions.size(), 1, 0, 0));
 		for(int i=0 ; i<instructions.size();i++){
 			JLabel l = new JLabel(instructions.get(i));
-			panel.add(l);
+			panelInstructions.add(l);
 			instructionLabels.add(l);
 		}
-		instructionMemory.remove(panel);
-		instructionMemory.setViewportView(panel);
+		instructionMemory.remove(panelInstructions);
+		instructionMemory.setViewportView(panelInstructions);
+                
 		repaint();
 	}
 	
@@ -389,7 +343,9 @@ public class MainView extends JFrame {
 		datapath.getMux5().setColor(Color.black);
 	}
         
-        // create menu bar for main frame
+        /** Create the menu bar for main view
+         * @author Alexandru
+         */
         private void createMenuBar() {
 
             JMenuBar menubar = new JMenuBar();
@@ -404,8 +360,22 @@ public class MainView extends JFrame {
             eMenuItem.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent event) {
+                    String filename = Utils.fileChooser(MainView.this);
                     
-                    
+                    try {
+                        
+                        // clear current instructions
+                        panelInstructions.removeAll();
+                        instructionLabels.clear();
+                        
+                        // add new instructions
+                        sim.loadInstructions(filename);
+                        
+                        MainView.this.repaint();
+                    } catch (IOException ex) {
+                        System.out.println("Eroare la citire fisier: " + ex);
+                        return;
+                    }
                 }
             });
             file.add(eMenuItem);
@@ -427,4 +397,60 @@ public class MainView extends JFrame {
             setJMenuBar(menubar);
         }
         
+        
+        /**
+	 * @return the panelMemory
+	 */
+	public JPanel getPanel2() {
+		return panelMemory;
+	}
+
+	/**
+	 * @param panel2 the panelMemory to set
+	 */
+	public void setPanel2(JPanel panel2) {
+		this.panelMemory = panel2;
+	}
+
+	/**
+	 * @return the paneRegisters
+	 */
+	public JPanel getPanel3() {
+		return paneRegisters;
+	}
+
+	/**
+	 * @param panel3 the paneRegisters to set
+	 */
+	public void setPanel3(JPanel panel3) {
+		this.paneRegisters = panel3;
+	}
+
+	/**
+	 * @return the panel_1
+	 */
+	public JPanel getPanel_1() {
+		return panel_1;
+	}
+
+	/**
+	 * @param panel_1 the panel_1 to set
+	 */
+	public void setPanel_1(JPanel panel_1) {
+		this.panel_1 = panel_1;
+	}
+
+	/**
+	 * @return the panel_2
+	 */
+	public JPanel getPanel_2() {
+		return panel_2;
+	}
+
+	/**
+	 * @param panel_2 the panel_2 to set
+	 */
+	public void setPanel_2(JPanel panel_2) {
+		this.panel_2 = panel_2;
+	}
 }

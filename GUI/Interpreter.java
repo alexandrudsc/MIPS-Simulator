@@ -7,14 +7,14 @@ package GUI;
 
 import java.awt.BorderLayout;
 import java.awt.TextArea;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 
+import simulator.Simulator;
 /**
  *
  * @author Alexandru
@@ -23,8 +23,12 @@ public class Interpreter extends JPanel {
     
     private TextArea txtArea;
     
-    public Interpreter()
+    private Simulator simulator;
+    
+    public Interpreter(Simulator simulator)
     {
+        this.simulator = simulator;
+        
         this.setLayout(new BorderLayout());
         
         initTextArea();
@@ -44,8 +48,17 @@ public class Interpreter extends JPanel {
 
             @Override
             public void keyTyped(KeyEvent e) {
-                if (e.getKeyChar() == '\n')
-                   txtArea.append(">>");
+                if (e.getKeyChar() == '\n'){
+                    try {
+                        // get all lines of the text area of the interpreter
+                        String[] liveInstr = txtArea.getText().split("\n");
+                        // the last line is the instruction to run. Firs to chars of line is the intepretor sign "<<", so skip them.
+                        simulator.runInstruction(liveInstr[liveInstr.length - 1].substring(2));
+                    } catch (Exception ex) {
+                        System.out.println("Instrucțiune invalidă: " + ex.toString());
+                    }
+                    txtArea.append(">>");
+                }
             }
 
             @Override

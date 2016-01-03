@@ -9,6 +9,10 @@ import helpers.*;
 import java.io.*;
 import java.util.*;
 
+/**
+ * Simulates the 5 phases of the execution of an instruction.
+ * The instruction are fetched from the list created from the gui.
+ */
 public class Simulator {
 
 	ArrayList<String> raw_instructions;
@@ -142,6 +146,20 @@ public class Simulator {
 		}
 	}
 	
+        /**
+         * Run a specific instruction for the live interpreter. Basically skip fetch stage.
+         * @param instruction
+         * @throws Exception 
+         * @author Alexandru.
+         */
+        public void runInstruction(String instruction) throws Exception{
+            current_raw_instruction = instruction;
+            decode_stage();
+            execute_stage();
+            memory_stage();
+            write_back_stage();
+	}
+        
 	public void run_all_instructions() throws Exception{
 		// Loop over all instructions executing one by one
 		while (pc >> 2 < raw_instructions.size()) {
@@ -194,16 +212,6 @@ public class Simulator {
 
 	private void load_instructions() throws IOException {
 
-		/*
-		 * String instruction = "add s2, s0, s1";
-		 * raw_instructions.add(instruction);
-		 * 
-		 * instruction = "lw s2, 4(s2)"; raw_instructions.add(instruction);
-		 * 
-		 * instruction = "sub s2, s2, s0"; raw_instructions.add(instruction);
-		 * 
-		 * instruction = "addi s2, s2, 1"; raw_instructions.add(instruction);
-		 */
 		InputStream input = getClass().getResourceAsStream("Program 1.txt");
 		BufferedReader br = new BufferedReader(new InputStreamReader(input));
 		String line = "";
@@ -214,6 +222,28 @@ public class Simulator {
 		gui.addInstructions(raw_instructions);
 	}
 	
+        /**
+         * Load the instructions from the specified file
+         * @param filename 
+         * @author Alexandru
+         */
+        public void loadInstructions(String filename) throws IOException {
+            
+            	InputStream input = getClass().getResourceAsStream(filename);
+		BufferedReader br = new BufferedReader(new InputStreamReader(input));
+                raw_instructions.clear();
+                
+		String line = "";
+		while (((line = br.readLine())) != null) {
+			raw_instructions.add(line);
+		}
+		
+                map_labels();
+		
+                gui.addInstructions(raw_instructions);
+             
+        }
+        
 	private void map_labels(){
 		int i =0;
 		ArrayList<String> rep = new ArrayList<String>();
