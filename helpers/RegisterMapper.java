@@ -5,7 +5,7 @@ import java.util.*;
 public class RegisterMapper {
 	
 	static Hashtable<String, Integer> registers ;
-	
+
 	public static void populate(){
 		registers = new Hashtable<String,Integer>();
 		registers.put("zero", 0);
@@ -41,6 +41,7 @@ public class RegisterMapper {
 		registers.put("fp", 30);
 		registers.put("ra", 31);
 		
+
 	}
 	
 	public static int map_to_index(String register){ // takes register name, returns its index e.g: a0 --> 1

@@ -1,5 +1,6 @@
 package simulator;
 
+import helpers.InstructionFuncCodes;
 import GUI.MainView;
 import components.*;
 import instructions.*;
@@ -36,7 +37,7 @@ public class Simulator {
 	int write_back_value;
 
 	boolean signal_alu_zero;
-	
+	 
 	MainView gui;
 
 	public static void main(String[] args) throws Exception {
@@ -131,6 +132,8 @@ public class Simulator {
 			System.out.println("Register s2 is now equal " + register_file.get_register(18));
 			System.out.println("Register s3 is now equal " + register_file.get_register(RegisterMapper.map_to_index("s3")));
 			
+                        gui.addOutputCode(current_instruction.toBinary());
+                        
 			System.out.println("========");
 
 			current_step = 0;
@@ -192,8 +195,14 @@ public class Simulator {
 
 		memory_unit = new MemoryUnit();
 
+                // create all registers
 		RegisterMapper.populate();
 
+                // map instructions to opcodes
+                InstructionFuncCodes.init();
+                
+                // map instructions to func codes
+                InstructionOpcodes.init();
 	}
 
 	private void load_data() throws IOException {
