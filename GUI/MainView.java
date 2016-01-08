@@ -1,6 +1,5 @@
 package GUI;
 
-import com.sun.org.apache.xml.internal.resolver.helpers.Debug;
 import file.operations.Utils;
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -19,6 +18,9 @@ import simulator.Simulator;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
@@ -42,6 +44,8 @@ public class MainView extends JFrame {
     private JScrollPane registers;
     private JPanel paneRegisters;
     
+    private JScrollPane outputCode;
+    private JPanel paneOuputCode;
     private DefaultListModel outputListModel;
     private JList<String> outputList;
     
@@ -135,9 +139,14 @@ public class MainView extends JFrame {
         outputLabel.setBounds(760, 50, 100, 20);
         contentPane.add(outputLabel);
         
-        outputList = new JList<String>();
-        outputList.setBounds(700, 70, 240, 300);
-        contentPane.add(outputList);
+        paneOuputCode = new JPanel();
+        outputCode = new JScrollPane();
+        outputList = new JList<>();
+        outputCode.setBounds(700, 70, 260, 300);
+        paneOuputCode.add(outputList);
+        outputCode.setViewportView(paneOuputCode);
+        contentPane.add(outputCode);
+
         // adapter for list
         this.outputListModel = new DefaultListModel();
         outputList.setModel(outputListModel);
@@ -405,6 +414,35 @@ public class MainView extends JFrame {
         });
         file.add(eMenuItem);
 
+        // file->export output
+        eMenuItem = new JMenuItem("Export cod masina");
+        eMenuItem.setMnemonic(KeyEvent.VK_E);
+        eMenuItem.setToolTipText("Import fisier instructiuni");
+        eMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                String filename = "codmasina.txt";
+                try {
+
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(new File(filename)));
+                    
+                    for(int i = 0; i < outputListModel.size(); i++)
+                    {
+                        bw.append((String)(outputListModel.elementAt(i)));
+                        bw.newLine();
+                    }
+                    
+                    bw.close();
+                    System.out.println("Saved");
+                    
+                } catch (IOException ex) {
+                    System.out.println("Eroare la scriere fisier: " + ex);
+                    return;
+                }
+            }
+        });
+        file.add(eMenuItem);
+        
         // file->exit menu item
         eMenuItem = new JMenuItem("Exit");
         eMenuItem.setMnemonic(KeyEvent.VK_E);
