@@ -4,7 +4,7 @@ package exceptions;
 public class MemoryOutOfBoundsException extends ArrayIndexOutOfBoundsException {
 	
 	public MemoryOutOfBoundsException(){
-		super("Sorry, the memory address you tried to access is out of bounds!");
+		super("Adresa de memorie invalida");
 	}
 
 }

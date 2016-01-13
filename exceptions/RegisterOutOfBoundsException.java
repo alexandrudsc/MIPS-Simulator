@@ -4,11 +4,11 @@ package exceptions;
 public class RegisterOutOfBoundsException extends ArrayIndexOutOfBoundsException {
 	
 	public RegisterOutOfBoundsException(){
-		super("This register is out of bounds.");
+		super("Registru invalid.");
 	}
 	
 	public RegisterOutOfBoundsException(int register_index){
-		super("Register # " + register_index + " is out of bounds.");
+		super("Registru # " + register_index + " invalid.");
 	}
 	
 }

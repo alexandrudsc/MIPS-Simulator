@@ -71,7 +71,7 @@ public class MainView extends JFrame {
         this.sim = s;
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(600, 10, 980, 750);
+        setBounds(300, 10, 980, 750);
 
         // create the menu bar
         createMenuBar();
@@ -86,10 +86,10 @@ public class MainView extends JFrame {
         datapath = new DataPath();
 
         datapathFrame = new JFrame();
-        datapathFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        datapathFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         datapathFrame.setBounds(10, 150, 1250, 700);
         datapathFrame.add(datapath);
-        datapathFrame.setVisible(true);
+        datapathFrame.setVisible(false);
 
         // label for memory panelInstructions
         Label instrLabel = new Label("Instrucțiuni");
@@ -319,7 +319,6 @@ public class MainView extends JFrame {
     }
 
     public void set_exec_red() {
-        System.out.println("RED CALLED");
         set_to_black();
 //		System.out.println(sim.get_current_instruction_format());
         switch (sim.get_current_instruction_format()) {
@@ -513,6 +512,26 @@ public class MainView extends JFrame {
         
         // add the menu file to menu bar
         menubar.add(file);
+        
+        
+        file = new JMenu("Unelte");
+        file.setMnemonic(KeyEvent.VK_F);
+        
+        // Unelte -> Vizual
+        eMenuItem = new JMenuItem("Vizual");
+        eMenuItem.setMnemonic(KeyEvent.VK_E);
+        eMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                System.out.println(""+ datapathFrame.isVisible());
+                datapathFrame.setVisible(!datapathFrame.isVisible());
+            }
+        });
+        file.add(eMenuItem);
+        
+        // add the menu file to menu bar
+        menubar.add(file);
+        
         
         setJMenuBar(menubar);
     }

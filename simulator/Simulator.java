@@ -107,7 +107,7 @@ public class Simulator {
 			execute_stage();
 			gui.set_exec_red();
 
-			System.out.println("ALU result = " + alu_result);
+			System.out.println("Rezultat ALU = " + alu_result);
 
 			current_step++;
 			break;
@@ -117,8 +117,8 @@ public class Simulator {
 			memory_stage();
 			gui.set_memory_red();
 
-			System.out.println("Memory result = " + memory_result);
-			System.out.println("word at address 24 is = "
+			System.out.println("Rezultat memorie = " + memory_result);
+			System.out.println("cuvantul de la adresa 24 este = "
 					+ memory_unit.load_word(24));
 
 			current_step++;
@@ -129,8 +129,8 @@ public class Simulator {
 			write_back_stage();
 			gui.set_write_back_red();
 
-			System.out.println("Register s2 is now equal " + register_file.get_register(18));
-			System.out.println("Register s3 is now equal " + register_file.get_register(RegisterMapper.map_to_index("s3")));
+			System.out.println("Registrul este egal cu " + register_file.get_register(18));
+			System.out.println("Registrul s3 este egal cu " + register_file.get_register(RegisterMapper.map_to_index("s3")));
 			
                         gui.addOutputCode(current_instruction.toBinary());
                         
@@ -171,7 +171,7 @@ public class Simulator {
 	}
 
 	private static void welcome_message() {
-		System.out.println("Hello World! --Git Style ;)");
+		System.out.println("Salut :)");
 	}
 
 	private void initialize_values() {
@@ -294,7 +294,7 @@ public class Simulator {
 			break;
 		case 3:
 			alu_result = logic_unit.execute(current_instruction);
-			System.out.println("ALU Signal is "+signal_alu_zero);
+			System.out.println("Semnal de la ALU "+signal_alu_zero);
 			if (signal_alu_zero){
 				write_to_pc(current_instruction.get_immediate_value());
 			}

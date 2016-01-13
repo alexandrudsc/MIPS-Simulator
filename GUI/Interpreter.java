@@ -55,7 +55,7 @@ public class Interpreter extends JPanel {
                         // the last line is the instruction to run. Firs to chars of line is the intepretor sign "<<", so skip them.
                         simulator.runInstruction(liveInstr[liveInstr.length - 1].substring(2));
                     } catch (Exception ex) {
-                        System.out.println("Instrucțiune invalidă: " + ex.toString());
+                        System.out.println("Instrucțiune invalidă ");
                     }
                     txtArea.append(">>");
                 }

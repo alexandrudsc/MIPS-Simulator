@@ -4,11 +4,11 @@ package exceptions;
 public class WriteNotAllowedException extends Exception {
 	
 	public WriteNotAllowedException(){
-		super("You are not allowed to write to this register");
+		super("Registrul nu poate fi scris");
 	}
 	
 	public WriteNotAllowedException(int register_index){
-		super("You are not allowed to write to register # " + register_index);
+		super("Registrul nu poate fi scris # " + register_index);
 	}
 	
 

@@ -69,7 +69,7 @@ public class Instruction {
         String ins_type = st1.nextToken().trim(), target = st1.nextToken()
                 .trim();
         get_class(ins_type);
-
+        
         switch (format) {
             case 0:
                 rd = RegisterMapper.map_to_index(target.trim());
@@ -118,6 +118,12 @@ public class Instruction {
     private void get_class(String str) {
 
         str = str.toLowerCase();
+        if (str.startsWith("#")){
+            format = -2;
+            type = InstructionType.commentariu;
+            return;
+        }
+        
         type = InstructionType.valueOf(str);
 
         switch (type) {
@@ -159,7 +165,7 @@ public class Instruction {
                 format = 4;
                 break;
             case jr:
-                format = 5; // Should change that they all have same value?
+                format = 5;
                 break;
             default:
                 format = -1;
@@ -171,12 +177,12 @@ public class Instruction {
 
     @Override
     public String toString() {
-        String base = "Instruction of type \"" + type + "\" and format = " + format + "\n";
+        String base = "Instructiune de tipul \"" + type + "\" si formatul = " + format + "\n";
         String specific = "";
         switch (format) {
             case 0:
                 specific += "   rs index = " + rs + ", rt index= " + rt + ", rd index= " + rd;
-                specific += immediate ? " and immediate value = " + immediate_value : "";
+                specific += immediate ? " valoare imediata = " + immediate_value : "";
                 break;
         }
         String str = base + specific;
@@ -184,6 +190,9 @@ public class Instruction {
     }
 
     public String toBinary() {
+        
+        if (type == InstructionType.commentariu)
+            return "";
         String binary = "";
         String rsBinary = "";
         String rtBinary = "";
